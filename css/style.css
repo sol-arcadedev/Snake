@@ -82,6 +82,8 @@ body {
 
 /* Video fills the screen overlay area */
 video.screen-overlay {
+  width: 36.63%;
+  height: 17.67%;
   object-fit: fill;
   background: #000;
   cursor: pointer;
