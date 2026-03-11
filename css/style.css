@@ -112,6 +112,37 @@ body {
   border-radius: 8px;
 }
 
+/* === TOP BAR === */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.ca-text {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.x-btn {
+  display: inline-block;
+  padding: 6px 16px;
+  background: #fff;
+  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  transition: opacity 0.15s;
+}
+
+.x-btn:hover {
+  opacity: 0.85;
+}
+
 /* === HINT TEXT === */
 .hint {
   color: rgba(255, 255, 255, 0.2);
