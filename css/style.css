@@ -80,6 +80,13 @@ body {
   border-radius: 1px;
 }
 
+/* Video fills the screen overlay area */
+video.screen-overlay {
+  object-fit: fill;
+  background: #000;
+  cursor: pointer;
+}
+
 /* =========================================
    INVISIBLE TOUCH KEYS
    =========================================

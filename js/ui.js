@@ -1,77 +1,97 @@
 /**
  * Nokia 3210 Snake - UI Controller
- * Overlays game on the real Nokia 3210 photo.
- *
- * Controls:
- * - Keyboard: Arrow keys / WASD, Enter to start, P to pause
- * - Keypad overlay: tap 2/4/6/8 on the phone image, 5 to start
- * - Swipe on screen area
+ * Plays the Nokia intro video first, then initializes the game.
  */
 (function () {
+  const video = document.getElementById('intro-video');
   const canvas = document.getElementById('game-canvas');
 
-  // Initialize game
-  Game.init(canvas);
+  function startGame() {
+    // Hide video, show canvas
+    video.style.display = 'none';
+    canvas.style.display = 'block';
 
-  // Keyboard input
-  document.addEventListener('keydown', Game.handleKey);
+    // Initialize game
+    Game.init(canvas);
 
-  // Invisible keypad touch targets over the photo
-  document.querySelectorAll('.touch-key').forEach(key => {
-    key.addEventListener('click', () => {
-      const k = key.dataset.key;
-      switch (k) {
-        case '2': Game.handleDirection(0, -1); break;
-        case '4': Game.handleDirection(-1, 0); break;
-        case '6': Game.handleDirection(1, 0); break;
-        case '8': Game.handleDirection(0, 1); break;
-        case '5': Game.handleStart(); break;
-      }
+    // Keyboard input
+    document.addEventListener('keydown', Game.handleKey);
+
+    // Invisible keypad touch targets over the photo
+    document.querySelectorAll('.touch-key').forEach(key => {
+      key.addEventListener('click', () => {
+        const k = key.dataset.key;
+        switch (k) {
+          case '2': Game.handleDirection(0, -1); break;
+          case '4': Game.handleDirection(-1, 0); break;
+          case '6': Game.handleDirection(1, 0); break;
+          case '8': Game.handleDirection(0, 1); break;
+          case '5': Game.handleStart(); break;
+        }
+      });
     });
-  });
 
-  // Prevent double-tap zoom on touch devices
-  document.querySelectorAll('.touch-key').forEach(btn => {
-    btn.addEventListener('touchstart', (e) => {
+    // Prevent double-tap zoom on touch devices
+    document.querySelectorAll('.touch-key').forEach(btn => {
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        btn.click();
+      }, { passive: false });
+    });
+
+    // Swipe support on the screen canvas
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    canvas.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
       e.preventDefault();
-      btn.click();
     }, { passive: false });
+
+    canvas.addEventListener('touchend', (e) => {
+      if (!e.changedTouches.length) return;
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      if (Math.max(absDx, absDy) < 12) {
+        Game.handleStart();
+        return;
+      }
+
+      if (absDx > absDy) {
+        Game.handleDirection(dx > 0 ? 1 : -1, 0);
+      } else {
+        Game.handleDirection(0, dy > 0 ? 1 : -1);
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('click', () => {
+      Game.handleStart();
+    });
+  }
+
+  // When intro video ends, switch to the game
+  video.addEventListener('ended', startGame);
+
+  // If video fails to load or play, skip straight to game
+  video.addEventListener('error', startGame);
+
+  // Allow skipping the intro by clicking/tapping the video
+  video.addEventListener('click', () => {
+    video.pause();
+    startGame();
   });
 
-  // Swipe support on the screen canvas
-  let touchStartX = 0;
-  let touchStartY = 0;
-
-  canvas.addEventListener('touchstart', (e) => {
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-    e.preventDefault();
-  }, { passive: false });
-
-  canvas.addEventListener('touchend', (e) => {
-    if (!e.changedTouches.length) return;
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - touchStartX;
-    const dy = touch.clientY - touchStartY;
-    const absDx = Math.abs(dx);
-    const absDy = Math.abs(dy);
-
-    if (Math.max(absDx, absDy) < 12) {
-      // Tap on screen = start/select
-      Game.handleStart();
-      return;
-    }
-
-    if (absDx > absDy) {
-      Game.handleDirection(dx > 0 ? 1 : -1, 0);
-    } else {
-      Game.handleDirection(0, dy > 0 ? 1 : -1);
-    }
-  }, { passive: false });
-
-  // Also allow clicking on the screen to start
-  canvas.addEventListener('click', () => {
-    Game.handleStart();
+  // Allow skipping with any key press
+  document.addEventListener('keydown', function skipIntro(e) {
+    if (video.style.display === 'none') return;
+    video.pause();
+    startGame();
+    document.removeEventListener('keydown', skipIntro);
   });
 })();

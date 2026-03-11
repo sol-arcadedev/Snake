@@ -16,8 +16,13 @@
   <div class="phone-container" id="phone-container">
     <img src="nokia-3210.png" alt="Nokia 3210" class="phone-img" draggable="false">
 
-    <!-- Game canvas overlaid on the LCD screen area -->
-    <canvas id="game-canvas" class="screen-overlay"></canvas>
+    <!-- Nokia intro video overlaid on the LCD screen area -->
+    <video id="intro-video" class="screen-overlay" autoplay muted playsinline>
+      <source src="Nokia_Intro.mp4" type="video/mp4">
+    </video>
+
+    <!-- Game canvas overlaid on the LCD screen area (hidden until intro ends) -->
+    <canvas id="game-canvas" class="screen-overlay" style="display:none;"></canvas>
 
     <!-- Invisible touch targets over the keypad keys in the image -->
     <div class="touch-keys">
