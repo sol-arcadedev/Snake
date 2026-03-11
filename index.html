@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nokia 3210 - Snake</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="phone-container" id="phone-container">
+    <img src="nokia-3210.png" alt="Nokia 3210" class="phone-img" draggable="false">
+
+    <!-- Game canvas overlaid on the LCD screen area -->
+    <canvas id="game-canvas" class="screen-overlay"></canvas>
+
+    <!-- Invisible touch targets over the keypad keys in the image -->
+    <div class="touch-keys">
+      <!-- Row 1 -->
+      <button class="touch-key" data-key="1" style="left:23.5%;top:51.5%;width:15.5%;height:6.2%;" aria-label="1"></button>
+      <button class="touch-key" data-key="2" style="left:41%;top:51%;width:17%;height:6.2%;" aria-label="2 - Up"></button>
+      <button class="touch-key" data-key="3" style="left:60.5%;top:50.5%;width:16%;height:6.2%;" aria-label="3"></button>
+      <!-- Row 2 -->
+      <button class="touch-key" data-key="4" style="left:22.5%;top:59.5%;width:16%;height:6.2%;" aria-label="4 - Left"></button>
+      <button class="touch-key" data-key="5" style="left:40.5%;top:59%;width:17%;height:6.2%;" aria-label="5"></button>
+      <button class="touch-key" data-key="6" style="left:60%;top:58.5%;width:16%;height:6.2%;" aria-label="6 - Right"></button>
+      <!-- Row 3 -->
+      <button class="touch-key" data-key="7" style="left:21.5%;top:67.5%;width:16.5%;height:6.2%;" aria-label="7"></button>
+      <button class="touch-key" data-key="8" style="left:40%;top:67%;width:17%;height:6.2%;" aria-label="8 - Down"></button>
+      <button class="touch-key" data-key="9" style="left:59.5%;top:66.5%;width:16%;height:6.2%;" aria-label="9"></button>
+      <!-- Row 4 -->
+      <button class="touch-key" data-key="*" style="left:20.5%;top:75.5%;width:16.5%;height:6.2%;" aria-label="*"></button>
+      <button class="touch-key" data-key="0" style="left:39.5%;top:75%;width:17%;height:6.2%;" aria-label="0"></button>
+      <button class="touch-key" data-key="#" style="left:59%;top:74.5%;width:16%;height:6.2%;" aria-label="#"></button>
+    </div>
+  </div>
+
+  <p class="hint">Arrow keys or 2&middot;4&middot;6&middot;8 &middot; Enter to start &middot; P to pause</p>
+
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

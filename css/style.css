@@ -1,0 +1,145 @@
+/* === RESET === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: #0a0a0a;
+  background: radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0a0a0a 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* =========================================
+   PHONE CONTAINER
+   =========================================
+   The real Nokia 3210 photo is 400x600.
+   We position the canvas over the screen area.
+*/
+
+.phone-container {
+  position: relative;
+  width: 400px;
+  height: 600px;
+  /* Subtle shadow behind the phone */
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+}
+
+.phone-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* =========================================
+   SCREEN OVERLAY
+   =========================================
+   Position the game canvas exactly over the
+   Nokia 3210's LCD screen in the photo.
+
+   Inner LCD coordinates (dark green area, not the grey bezel):
+   Image is 400x600.
+   - LCD top-left:     ~(136, 145)
+   - LCD top-right:    ~(282, 140)
+   - LCD bottom-left:  ~(138, 226)
+   - LCD bottom-right: ~(284, 221)
+   - Center: ~(210, 183)
+   - Size:  ~146 x 82
+   - Tilt:  ~-2° clockwise
+*/
+
+.screen-overlay {
+  position: absolute;
+  /* Percentage-based positioning relative to 400x600 image */
+  left: 32%;
+  top: 27.58%;
+  width: 36.63%;
+  height: 17.67%;
+  transform: rotate(0.39deg);
+  transform-origin: center center;
+  /* Pixel-perfect rendering */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  /* Blend into the LCD */
+  border-radius: 1px;
+}
+
+/* =========================================
+   INVISIBLE TOUCH KEYS
+   =========================================
+   Positioned over the keypad in the photo.
+   Users can tap the actual keys in the image.
+*/
+
+.touch-keys {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.touch-key {
+  position: absolute;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+  /* Debug: uncomment to see hit areas */
+  /* background: rgba(255, 0, 0, 0.15); */
+}
+
+.touch-key:active {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+/* === HINT TEXT === */
+.hint {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 12px;
+  margin-top: 16px;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+/* === RESPONSIVE === */
+@media (max-height: 700px) {
+  .phone-container {
+    width: 320px;
+    height: 480px;
+  }
+  .hint { margin-top: 6px; font-size: 11px; }
+}
+
+@media (max-height: 550px) {
+  .phone-container {
+    width: 260px;
+    height: 390px;
+  }
+}
+
+@media (max-width: 420px) {
+  .phone-container {
+    width: 90vw;
+    height: calc(90vw * 1.5);
+  }
+}
