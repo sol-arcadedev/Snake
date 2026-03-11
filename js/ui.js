@@ -5,16 +5,21 @@
 (function () {
   const video = document.getElementById('intro-video');
   const canvas = document.getElementById('game-canvas');
+  let gameStarted = false;
 
   function startGame() {
+    if (gameStarted) return;
+    gameStarted = true;
+
     // Hide video, show canvas
     video.style.display = 'none';
-    canvas.style.display = 'block';
+    video.pause();
+    canvas.removeAttribute('style');  // clear the inline display:none
 
     // Initialize game
     Game.init(canvas);
 
-    // Keyboard input
+    // Keyboard input (added after init so no race condition)
     document.addEventListener('keydown', Game.handleKey);
 
     // Invisible keypad touch targets over the photo
@@ -82,15 +87,16 @@
   video.addEventListener('error', startGame);
 
   // Allow skipping the intro by clicking/tapping the video
-  video.addEventListener('click', () => {
-    video.pause();
+  video.addEventListener('click', () => startGame());
+  video.addEventListener('touchstart', (e) => {
+    e.preventDefault();
     startGame();
-  });
+  }, { passive: false });
 
   // Allow skipping with any key press
   document.addEventListener('keydown', function skipIntro(e) {
-    if (video.style.display === 'none') return;
-    video.pause();
+    if (gameStarted) return;
+    e.preventDefault();
     startGame();
     document.removeEventListener('keydown', skipIntro);
   });
